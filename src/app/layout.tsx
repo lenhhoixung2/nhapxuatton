@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { BottomNav } from "@/components/BottomNav";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AutoCacheClear } from "@/components/AutoCacheClear";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,6 +42,7 @@ export default function RootLayout({
             {children}
           </ErrorBoundary>
         </main>
+        <AutoCacheClear />
         <BottomNav />
       </body>
     </html>
