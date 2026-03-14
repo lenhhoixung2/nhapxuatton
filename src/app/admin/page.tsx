@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { 
   Users, Database, FileText, Settings, 
   ShieldAlert, ChevronRight, LayoutDashboard,
-  ExternalLink, CheckCircle2
+  ExternalLink, CheckCircle2, ShieldCheck
 } from 'lucide-react'
 
 export default async function AdminPage() {
@@ -18,114 +18,101 @@ export default async function AdminPage() {
   const managementItems = [
     {
       title: 'Quản Lý Nhân Sự',
-      desc: 'Duyệt thành viên & Phân quyền chi tiết',
+      desc: 'Duyệt thành viên & Phân quyền',
       href: '/users',
       icon: Users,
-      color: 'text-violet-400',
-      bgColor: 'bg-violet-400/10'
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50'
     },
     {
       title: 'Danh Mục Sản Phẩm',
-      desc: 'Quản lý kho hàng & Mã vạch',
+      desc: 'Kho hàng & Mã vạch',
       href: '/products',
       icon: Database,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-400/10'
+      color: 'text-indigo-600',
+      bgColor: 'bg-indigo-50'
     },
     {
       title: 'Cấu Hình Google Sheets',
-      desc: 'Xem thông tin đồng bộ dữ liệu Cloud',
+      desc: 'Thông tin hệ thống & Sheets Cloud',
       href: '/admin/settings',
       icon: FileText,
-      color: 'text-emerald-400',
-       bgColor: 'bg-emerald-400/10'
-    },
-    // {
-    //   title: 'Cài Đặt Hệ Thống',
-    //   desc: 'Bảo trì & Thiết lập chung',
-    //   href: '#',
-    //   icon: Settings,
-    //   color: 'text-slate-400',
-    //   bgColor: 'bg-slate-400/10'
-    // }
+      color: 'text-emerald-600',
+       bgColor: 'bg-emerald-50'
+    }
   ]
 
   return (
-    <div className="flex-1 w-full px-6 pt-12 pb-24">
+    <div className="flex-1 w-full px-5 pt-10 pb-24 bg-slate-50/30">
       
       {/* ── HEADER ── */}
       <header className="mb-10 text-center">
-        <div className="inline-block mb-3 px-3 py-1 bg-violet-500/10 border border-violet-500/20 rounded-full">
-          <span className="text-[10px] font-black uppercase tracking-widest text-violet-400">Trung tâm quản trị</span>
+        <div className="inline-flex p-4 bg-slate-900 text-white rounded-[2rem] shadow-xl shadow-slate-200 mb-6">
+           <ShieldCheck size={32} strokeWidth={2.5} />
         </div>
-        <h1 className="text-4xl font-black tracking-tight leading-tight text-white px-4">
+        <h1 className="text-3xl font-black tracking-tight text-slate-900 px-4">
           Hệ Thống <br />
-          <span className="text-gradient">Power CMS</span>
+          <span className="text-blue-600">Power CMS</span>
         </h1>
-        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-4">Phiên bản 2.5 Professional</p>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-3">Phiên bản 2.5 Pro Cloud</p>
       </header>
 
-      {/* ── STATUS CARDS ── */}
-      <div className="glass-card rounded-[2rem] p-6 border-white/5 mb-10 relative overflow-hidden">
+      {/* ── STATUS CARD ── */}
+      <div className="bg-white border-2 border-slate-100 rounded-[2.5rem] p-6 shadow-sm mb-8">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-             <CheckCircle2 size={24} />
+          <div className="w-11 h-11 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 border border-emerald-100">
+             <CheckCircle2 size={24} strokeWidth={3} />
           </div>
           <div>
-            <p className="text-xs font-black text-white">Trạng thái hệ thống</p>
-            <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mt-1">Hoạt động bình thường</p>
+            <p className="text-[11px] font-black text-slate-900 uppercase">Trạng thái hệ thống</p>
+            <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-widest mt-0.5">Online & Sẵn sàng</p>
           </div>
         </div>
         
-        {/* Decorative divider */}
-        <div className="my-6 h-[1px] bg-white/5" />
+        <div className="my-5 h-[1.5px] bg-slate-50" />
         
         <div className="grid grid-cols-2 gap-4">
-          <div>
-             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Thời gian mkt</p>
-             <p className="text-xs font-black text-white mt-1">Bản Pro Cloud</p>
+          <div className="p-3 bg-slate-50/50 rounded-2xl">
+             <p className="text-[8px] font-bold text-slate-400 uppercase">Bảo mật</p>
+             <p className="text-[10px] font-black text-slate-900 mt-1">Cấp cao</p>
           </div>
-          <div>
-             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Bảo mật</p>
-             <p className="text-xs font-black text-white mt-1">Mã hóa 2 lớp</p>
+          <div className="p-3 bg-slate-50/50 rounded-2xl">
+             <p className="text-[8px] font-bold text-slate-400 uppercase">Lưu trữ</p>
+             <p className="text-[10px] font-black text-slate-900 mt-1">Cloud Sync</p>
           </div>
         </div>
       </div>
 
       {/* ── MENU ITEMS ── */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {managementItems.map((item) => {
           const Icon = item.icon
           return (
             <Link 
               key={item.href}
               href={item.href}
-              className="glass-card rounded-3xl p-5 flex items-center gap-5 hover:border-white/10 active:scale-[0.98] transition-all group"
+              className="bg-white border border-slate-100 rounded-[2rem] p-4 flex items-center gap-4 hover:border-blue-200 active:scale-[0.98] transition-all group shadow-sm"
             >
-              <div className={`w-14 h-14 ${item.bgColor} ${item.color} rounded-2xl flex items-center justify-center border border-white/5 shadow-inner group-hover:scale-110 transition-transform`}>
-                <Icon size={24} strokeWidth={2.5} />
+              <div className={`w-12 h-12 ${item.bgColor} ${item.color} rounded-[1.2rem] flex items-center justify-center border border-white transition-transform group-hover:scale-105`}>
+                <Icon size={22} strokeWidth={3} />
               </div>
               
               <div className="flex-1 min-w-0">
-                <h3 className="text-base font-black text-white leading-tight group-hover:text-blue-400 transition-colors">{item.title}</h3>
-                <p className="text-[10px] text-slate-500 font-bold mt-1 uppercase tracking-tight">{item.desc}</p>
+                <h3 className="text-sm font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">{item.title}</h3>
+                <p className="text-[9px] text-slate-400 font-bold mt-1 uppercase truncate">{item.desc}</p>
               </div>
 
-              <ChevronRight size={20} className="text-slate-700 group-hover:text-blue-400 transition-colors" />
+              <ChevronRight size={18} className="text-slate-300 group-hover:text-blue-600 transition-colors" />
             </Link>
           )
         })}
       </div>
 
-      {/* ── INFO BOX ── */}
-      <div className="mt-12 p-6 glass-card bg-rose-500/5 border-rose-500/10 rounded-[2rem] flex items-start gap-4">
-        <ShieldAlert size={20} className="text-rose-400 flex-shrink-0 mt-0.5" />
-        <div>
-          <h4 className="text-[11px] font-black text-rose-300 uppercase tracking-widest">Cảnh báo bảo mật</h4>
-          <p className="text-[10px] text-rose-300/60 font-medium leading-relaxed mt-1">
-            Mọi hành động trong Power CMS đều được ghi nhật ký hệ thống. Hãy cẩn trọng khi thay đổi quyền hạn nhân viên.
-          </p>
-        </div>
+      <div className="mt-10 p-5 bg-rose-50 border border-rose-100 rounded-[2rem] flex items-start gap-3">
+        <ShieldAlert size={18} className="text-rose-600 flex-shrink-0 mt-0.5" />
+        <p className="text-[9px] text-rose-800/60 font-black uppercase leading-relaxed">
+          Thận trọng: Mọi thay đổi về phân quyền sẽ có hiệu lực ngay lập tức đối với nhân viên.
+        </p>
       </div>
 
     </div>

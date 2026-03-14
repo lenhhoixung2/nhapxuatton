@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { register } from '@/lib/auth-actions'
 import Link from 'next/link'
-import { UserPlus, Mail, Phone, User, ArrowLeft, ShieldCheck, CheckCircle2 } from 'lucide-react'
+import { UserPlus, Mail, Phone, User, ArrowLeft, CheckCircle2 } from 'lucide-react'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' })
@@ -22,68 +22,62 @@ export default function RegisterPage() {
     if (res.success) {
       setSuccess(true)
     } else {
-      setError(res.error || 'Đã xảy ra lỗi.')
+      setError(res.error || 'Xảy ra lỗi khi gửi.')
       setLoading(false)
     }
   }
 
   if (success) {
     return (
-      <div className="flex-1 w-full flex flex-col items-center justify-center px-10 relative">
-        <div className="glass-card p-10 rounded-[3rem] border-white/5 text-center shadow-2xl relative z-10">
-          <div className="w-20 h-20 bg-emerald-500/10 text-emerald-400 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-900/20 border border-emerald-500/20">
-            <CheckCircle2 size={40} strokeWidth={2.5} />
+      <div className="flex-1 w-full flex flex-col items-center justify-center px-8 bg-slate-50 min-h-screen">
+        <div className="bg-white border-2 border-slate-100 p-10 rounded-[3rem] text-center shadow-xl">
+          <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-[1.5rem] flex items-center justify-center mx-auto mb-6 border border-emerald-100 shadow-sm">
+            <CheckCircle2 size={32} strokeWidth={3} />
           </div>
-          <h1 className="text-3xl font-black text-white mb-3 tracking-tight">Thành Công!</h1>
-          <p className="text-xs text-slate-400 font-bold leading-relaxed mb-8 uppercase tracking-wide">
-            Yêu cầu của bạn đã được gửi. <br />
-            Quản trị viên sẽ liên hệ <br /> 
-            để cung cấp mật khẩu.
+          <h1 className="text-2xl font-black text-slate-900 mb-2 tracking-tight">Gửi Thành Công!</h1>
+          <p className="text-[10px] text-slate-400 font-bold leading-relaxed mb-8 uppercase tracking-widest px-4">
+            Quản trị viên sẽ sớm liên hệ <br /> 
+            để phê duyệt tài khoản của bạn.
           </p>
           <Link 
             href="/login"
-            className="block w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-900/40 hover:bg-blue-500 transition-all active:scale-[0.98]"
+            className="block w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-100"
           >
             Quay lại Đăng nhập
           </Link>
         </div>
-        
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-emerald-600/5 blur-[100px] rounded-full" />
       </div>
     )
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col items-center px-8 pt-12 pb-12 relative overflow-hidden">
+    <div className="flex-1 w-full flex flex-col items-center px-8 pt-12 pb-12 bg-slate-50 min-h-screen">
       
-      {/* ── BACKGROUND ACCENT ── */}
-      <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-600/5 blur-[100px] rounded-full pointer-events-none" />
-      
-      <div className="w-full max-w-sm relative z-10">
+      <div className="w-full max-w-sm">
         
         {/* ── HEADER ── */}
         <div className="mb-10 flex items-center gap-4">
-          <button onClick={() => router.back()} className="p-3 glass-button rounded-2xl text-slate-400 hover:text-white transition-colors">
+          <button onClick={() => router.back()} className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 shadow-sm">
             <ArrowLeft size={20} strokeWidth={3} />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-white tracking-tight">Đăng ký mới</h1>
-            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Yêu cầu gia nhập đội ngũ</p>
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">Đăng ký</h1>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Yêu cầu gia nhập kho PRO</p>
           </div>
         </div>
 
-        {/* ── REGISTER FORM ── */}
-        <div className="glass-card rounded-[3rem] p-8 border-white/5 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        {/* ── FORM ── */}
+        <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 shadow-xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 px-1">Tên của bạn</label>
-              <div className="relative group">
-                <User className="absolute left-4 top-4 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Tên của bạn</label>
+              <div className="relative">
+                <User className="absolute left-4 top-4 text-slate-300" size={18} />
                 <input
                   required
                   type="text"
-                  placeholder="Nguyễn Văn A"
-                  className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/5 rounded-2xl text-sm font-bold text-white outline-none focus:border-blue-500/50 transition-all placeholder-slate-700"
+                  placeholder="Họ và tên"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 focus:bg-white transition-all shadow-inner"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
@@ -91,14 +85,13 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 px-1">Email liên hệ</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-4 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Email liên hệ</label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-4 text-slate-300" size={18} />
                 <input
                   required
                   type="email"
-                  placeholder="email@example.com"
-                  className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/5 rounded-2xl text-sm font-bold text-white outline-none focus:border-blue-500/50 transition-all placeholder-slate-700"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 focus:bg-white transition-all shadow-inner"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -106,14 +99,14 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 px-1">Số điện thoại</label>
-              <div className="relative group">
-                <Phone className="absolute left-4 top-4 text-slate-600 group-focus-within:text-blue-400 transition-colors" size={18} />
+              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-1">Số điện thoại</label>
+              <div className="relative">
+                <Phone className="absolute left-4 top-4 text-slate-300" size={18} />
                 <input
                   required
                   type="tel"
                   placeholder="09xx xxx xxx"
-                  className="w-full pl-12 pr-5 py-4 bg-white/5 border border-white/5 rounded-2xl text-sm font-bold text-white outline-none focus:border-blue-500/50 transition-all placeholder-slate-700"
+                  className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:border-blue-600 focus:bg-white transition-all shadow-inner"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 />
@@ -121,7 +114,7 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <div className="p-3 bg-rose-500/10 text-rose-400 rounded-xl text-[10px] font-bold border border-rose-500/10 animate-shake">
+              <div className="p-3 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl text-[10px] font-black animate-shake">
                 ⚠️ {error}
               </div>
             )}
@@ -129,16 +122,14 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-[1.8rem] font-black text-xs shadow-2xl shadow-blue-900/40 hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 uppercase tracking-widest"
+              className="w-full py-5 bg-blue-600 text-white rounded-[2rem] font-black text-xs shadow-xl shadow-blue-100 hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 uppercase tracking-widest"
             >
-              {loading ? 'Đang gửi...' : 'Gửi yêu cầu hệ thống'}
+              {loading ? 'Đang gửi yêu cầu...' : 'Gửi yêu cầu hệ thống'}
             </button>
           </form>
         </div>
 
-        <p className="text-center mt-8 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-            Bảo mật tối đa bởi <span className="text-blue-500">Kho Pro Cloud</span>
-        </p>
+        <p className="text-center mt-8 text-[9px] text-slate-300 font-black uppercase tracking-[0.5em]">Bảo mật bởi Kho Pro Cloud</p>
 
       </div>
     </div>

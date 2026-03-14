@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { RefreshCw, Trash2 } from 'lucide-react'
+import { BadgeCheck } from 'lucide-react'
 
 export function AutoCacheClear() {
+  const [showToast, setShowToast] = useState(false)
   const [lastCleared, setLastCleared] = useState<string | null>(null)
 
-  const performClear = async (showReload = false) => {
+  const performClear = async () => {
     try {
       // 1. Clear Service Worker Caches
       if ('caches' in window) {
@@ -14,52 +15,46 @@ export function AutoCacheClear() {
         await Promise.all(cacheNames.map(name => caches.delete(name)))
       }
 
-      // 2. Clear Session Storage (Safe for our cookie-based auth)
+      // 2. Clear Session Storage
       sessionStorage.clear()
-
-      // 3. Optional: Clear localStorage (Except core items if any)
-      // localStorage.clear() 
 
       const now = new Date().toLocaleTimeString('vi-VN')
       setLastCleared(now)
-      console.log(`[Cache] Đã xóa cache lúc ${now}`)
+      console.log(`[Cache] Tự động tối ưu hệ thống lúc ${now}`)
 
-      if (showReload) {
-        window.location.reload()
-      }
+      // Show silent notification
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 4000)
+      
     } catch (e) {
-      console.error('Lỗi khi xóa cache:', e)
+      console.error('Lỗi khi dọn cache:', e)
     }
   }
 
   useEffect(() => {
-    // Xóa ngay khi vào app
+    // Tối ưu ngay khi vào app
     performClear()
 
-    // Tự động xóa mỗi 10 phút
+    // Tự động tối ưu mỗi 10 phút
     const interval = setInterval(() => {
-      performClear(false) // Tự động xóa ngầm, không reload gây khó chịu
+      performClear()
     }, 10 * 60 * 1000)
 
     return () => clearInterval(interval)
   }, [])
 
   return (
-    <div className="fixed bottom-20 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
-       {/* Thông báo nhỏ khi vừa xóa xong */}
-       {lastCleared && (
-         <div className="bg-slate-800/80 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded-lg border border-white/10 animate-fade-in-out">
-           Cache gần nhất: {lastCleared}
-         </div>
-       )}
-       
-       <button 
-         onClick={() => performClear(true)}
-         className="pointer-events-auto w-10 h-10 bg-rose-500 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-rose-600 active:scale-90 transition-all border-2 border-white/20"
-         title="Xóa cache & Tải lại ngay"
-       >
-         <Trash2 size={20} />
-       </button>
-    </div>
+    <>
+      {showToast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[10000] animate-in fade-in slide-in-from-top-4 duration-500">
+           <div className="bg-slate-900/90 text-white px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
+              <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+                 <BadgeCheck size={14} strokeWidth={3} />
+              </div>
+              <p className="text-[10px] font-black uppercase tracking-widest">Hệ thống đã được tối ưu cache</p>
+           </div>
+        </div>
+      )}
+    </>
   )
 }

@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* Deep Slate 950 */
-  --foreground: #f8fafc;
-  --card-bg: rgba(30, 41, 59, 0.7); /* Slate 800 with opacity */
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --accent-blue: #3b82f6;
-  --accent-violet: #8b5cf6;
+  --background: #f8fafc; /* Slate 50 - Sáng sủa */
+  --foreground: #0f172a; /* Slate 900 - Chữ đậm nét */
+  --card-bg: #ffffff;
+  --accent-blue: #2563eb; /* Blue 600 - Cứng cáp */
+  --accent-soft-blue: #eff6ff;
+  --border-color: #e2e8f0;
 }
 
 @theme inline {
@@ -23,43 +23,30 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── PREMIUM UTILITIES ── */
+/* ── SOLID PRO UTILITIES ── */
 
-.glass-card {
+.pro-card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-.glass-button {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.pro-button {
+  background: var(--accent-blue);
+  color: white;
   transition: all 0.2s ease;
+  font-weight: 700;
 }
 
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+.pro-button:active {
+  transform: scale(0.95);
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, var(--accent-blue), var(--accent-violet));
+.text-gradient-pro {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
 }
 
 @keyframes shake {
@@ -72,17 +59,26 @@ body {
   animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-/* Custom Scrollbar */
+@keyframes slide-up {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out forwards;
+}
+
+/* Custom Scrollbar - Cleaner */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #cbd5e1;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #94a3b8;
 }

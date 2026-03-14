@@ -7,7 +7,7 @@ import { deleteUser, updateUserPermissions, updateUserRole } from './actions'
 import { 
   Trash2, LogOut, Mail, Phone, 
   BadgeCheck, AlertCircle, UserCog, Shield, 
-  ChevronRight, User
+  ChevronRight, Lock, ShieldCheck
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -27,15 +27,15 @@ interface UserData {
 }
 
 const ROLE_LABELS: Record<string, string> = {
-  ADMIN: 'Chủ kho (Admin)',
+  ADMIN: 'Chủ kho',
   MANAGER: 'Quản lý',
   VIEWER: 'Nhân viên',
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  ADMIN: 'text-violet-400 bg-violet-400/10 border-violet-400/20',
-  MANAGER: 'text-blue-400 bg-blue-400/10 border-blue-400/20',
-  VIEWER: 'text-slate-400 bg-slate-400/10 border-slate-400/20',
+  ADMIN: 'text-white bg-blue-600 border-blue-600',
+  MANAGER: 'text-blue-600 bg-blue-50 border-blue-100',
+  VIEWER: 'text-slate-500 bg-slate-50 border-slate-100',
 }
 
 export default function UsersPageClient({ users, currentUserId }: { users: UserData[]; currentUserId: string }) {
@@ -56,24 +56,24 @@ export default function UsersPageClient({ users, currentUserId }: { users: UserD
 
   const handleApprove = async (id: string) => {
     if (!tempPassword) {
-      alert('Vui lòng nhập mật khẩu để cấp cho người dùng.')
+      alert('Nhập mật khẩu cấp cho user.')
       return
     }
     setError('')
     const res = await approveUser(id, tempPassword)
     if (res.success) {
-      setSuccess('Đã duyệt tài khoản thành công!')
+      setSuccess('Đã duyệt tài khoản!')
       setApprovingId(null)
       setTempPassword('')
       router.refresh()
       setTimeout(() => setSuccess(''), 3000)
     } else {
-      setError(res.error || 'Lỗi khi duyệt.')
+      setError(res.error || 'Lỗi duyệt.')
     }
   }
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Xóa tài khoản "${name}"?`)) return
+    if (!confirm(`Xóa "${name}"?`)) return
     try {
       await deleteUser(id)
       router.refresh()
@@ -101,21 +101,19 @@ export default function UsersPageClient({ users, currentUserId }: { users: UserD
   }
 
   return (
-    <div className="flex-1 w-full px-6 pt-12 pb-24">
+    <div className="flex-1 w-full px-5 pt-10 pb-24 bg-slate-50/30">
+      
       {/* ── HEADER ── */}
-      <header className="mb-10 flex items-end justify-between">
+      <header className="mb-8 flex items-center justify-between">
         <div>
-          <div className="inline-block mb-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-            <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">CMS Quản lý</span>
-          </div>
-          <h1 className="text-4xl font-black tracking-tight leading-tight text-white">
-            Nhân sự <br />
-            <span className="text-gradient">& Phân quyền</span>
-          </h1>
+           <div className="inline-block mb-1 px-2.5 py-0.5 bg-slate-900 text-white rounded-lg">
+             <span className="text-[10px] font-black uppercase tracking-widest">Admin Hub</span>
+           </div>
+           <h1 className="text-3xl font-black tracking-tight text-slate-900">Nhân Sự</h1>
         </div>
         <button
           onClick={handleLogout}
-          className="p-4 glass-card text-rose-400 rounded-2xl hover:text-rose-300 active:scale-95 transition-all shadow-lg shadow-rose-900/10 border-rose-500/10"
+          className="p-3 bg-white border border-slate-200 text-slate-400 rounded-2xl hover:text-rose-500 hover:border-rose-100 transition-all shadow-sm"
         >
           <LogOut size={20} />
         </button>
@@ -123,94 +121,71 @@ export default function UsersPageClient({ users, currentUserId }: { users: UserD
 
       {/* ── ALERTS ── */}
       {error && (
-        <div className="mb-6 p-4 glass-card bg-rose-500/10 text-rose-400 rounded-2xl text-[11px] font-bold border-rose-500/20 flex items-center gap-3 animate-shake">
+        <div className="mb-6 p-4 bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl text-[11px] font-black flex items-center gap-3 animate-shake">
           <AlertCircle size={18} /> {error}
         </div>
       )}
       
       {success && (
-        <div className="mb-6 p-4 glass-card bg-emerald-500/10 text-emerald-400 rounded-2xl text-[11px] font-bold border-emerald-500/20 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+        <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-2xl text-[11px] font-black flex items-center gap-3">
           <BadgeCheck size={18} /> {success}
         </div>
       )}
 
       {/* ── PENDING REQUESTS ── */}
       {pendingUsers.length > 0 && (
-        <section className="mb-12">
-          <div className="flex items-center gap-3 mb-6 px-2">
-            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
-            <h2 className="text-[11px] font-black text-white uppercase tracking-widest leading-none">Yêu cầu chờ duyệt ({pendingUsers.length})</h2>
+        <section className="mb-10">
+          <div className="flex items-center gap-2 mb-4 px-1">
+            <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse" />
+            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Chờ Duyệt ({pendingUsers.length})</h2>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             {pendingUsers.map(u => (
-              <div key={u.id} className="glass-card rounded-[2.5rem] p-6 border-amber-500/20 relative overflow-hidden group">
-                {/* Decorative icon background */}
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                  <UserCog size={80} className="text-amber-500" />
-                </div>
-                
-                <div className="relative z-10">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-black text-white leading-tight">{u.name}</h3>
-                      <div className="flex flex-col gap-2 mt-3">
-                        <span className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                          <Mail size={12} className="text-blue-500/50" /> {u.email}
-                        </span>
-                        <span className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                          <Phone size={12} className="text-emerald-500/50" /> {u.phone || 'Chưa có SĐT'}
-                        </span>
-                      </div>
+              <div key={u.id} className="bg-white border-2 border-amber-100 rounded-3xl p-5 shadow-sm">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900 leading-none">{u.name}</h3>
+                    <div className="flex flex-col gap-1.5 mt-3">
+                      <span className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase">
+                        <Mail size={12} /> {u.email}
+                      </span>
+                      <span className="flex items-center gap-2 text-[10px] text-slate-400 font-bold uppercase">
+                        <Phone size={12} /> {u.phone || 'N/A'}
+                      </span>
                     </div>
-                    {approvingId !== u.id && (
-                      <button 
-                        onClick={() => handleDelete(u.id, u.name)}
-                        className="p-3 glass-button text-slate-500 hover:text-rose-400 rounded-2xl"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    )}
                   </div>
+                  <button onClick={() => handleDelete(u.id, u.name)} className="p-2 text-slate-300 hover:text-rose-500 transition-colors">
+                    <Trash2 size={18} />
+                  </button>
+                </div>
 
-                  {approvingId === u.id ? (
-                    <div className="mt-6 p-5 glass-card bg-white/[0.03] rounded-3xl border-dashed border-white/10 animate-in zoom-in-95 duration-200">
-                      <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-4">Mật khẩu cấp mới:</p>
-                      <div className="flex flex-col gap-3">
-                        <input 
-                          autoFocus
-                          type="text" 
-                          placeholder="Nhập MK (ví dụ: 123456)" 
-                          className="w-full px-5 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-black text-white outline-none focus:border-blue-500/50 transition-all placeholder-slate-700"
-                          value={tempPassword}
-                          onChange={(e) => setTempPassword(e.target.value)}
-                        />
-                        <div className="flex gap-3 mt-1">
-                          <button 
-                            onClick={() => setApprovingId(null)}
-                            className="flex-1 py-4 text-xs font-black text-slate-500 uppercase tracking-widest hover:text-white transition-colors"
-                          >
-                            Hủy
-                          </button>
-                          <button 
-                            onClick={() => handleApprove(u.id)}
-                            className="flex-[2] py-4 bg-blue-600 text-white rounded-2xl text-xs font-black shadow-xl shadow-blue-900/30 active:scale-95 transition-all uppercase tracking-widest"
-                          >
-                            Duyệt Ngay
-                          </button>
-                        </div>
+                {approvingId === u.id ? (
+                  <div className="mt-5 p-4 bg-slate-50 rounded-2xl border border-slate-100 animate-slide-up">
+                    <p className="text-[9px] font-black text-blue-600 uppercase mb-3">Cấp mật khẩu mới:</p>
+                    <div className="flex flex-col gap-2">
+                      <input 
+                        autoFocus
+                        type="text" 
+                        placeholder="Mật khẩu (vd: 123456)" 
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-900 outline-none focus:border-blue-500 transition-all"
+                        value={tempPassword}
+                        onChange={(e) => setTempPassword(e.target.value)}
+                      />
+                      <div className="flex gap-2">
+                        <button onClick={() => setApprovingId(null)} className="flex-1 py-3 text-[10px] font-black uppercase text-slate-400">Hủy</button>
+                        <button onClick={() => handleApprove(u.id)} className="flex-[2] py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase shadow-lg shadow-blue-100">Duyệt Ngay</button>
                       </div>
                     </div>
-                  ) : (
-                    <button 
-                      onClick={() => setApprovingId(u.id)}
-                      className="w-full mt-6 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-3xl font-black text-[11px] shadow-2xl shadow-blue-900/40 hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 uppercase tracking-widest"
-                    >
-                      <BadgeCheck size={18} strokeWidth={3} className="text-blue-200" />
-                      Phê Duyệt Tài Khoản
-                    </button>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => setApprovingId(u.id)}
+                    className="w-full mt-5 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] shadow-lg shadow-blue-100 hover:bg-blue-700 active:scale-95 transition-all uppercase tracking-widest"
+                  >
+                    Phê Duyệt Thành Viên
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -219,90 +194,74 @@ export default function UsersPageClient({ users, currentUserId }: { users: UserD
 
       {/* ── OFFICIAL STAFF ── */}
       <section>
-        <div className="flex items-center gap-3 mb-6 px-2">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-          <h2 className="text-[11px] font-black text-white uppercase tracking-widest leading-none">Đội ngũ vận hành ({approvedUsers.length})</h2>
+        <div className="flex items-center gap-2 mb-4 px-1">
+          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Đội Ngũ ({approvedUsers.length})</h2>
         </div>
 
         <div className="space-y-4">
           {approvedUsers.map((u) => (
-            <div key={u.id} className="glass-card rounded-[2.5rem] border-white/5 overflow-hidden group">
-              {/* Card Title Area */}
-              <div className="p-6 flex items-center justify-between border-b border-white/5">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500/10 to-violet-500/10 rounded-2xl flex items-center justify-center text-gradient font-black text-2xl border border-white/5 shadow-inner">
+            <div key={u.id} className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm">
+              <div className="p-5 flex items-center justify-between border-b border-slate-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-lg">
                     {u.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <p className="font-black text-white text-base leading-none">{u.name}</p>
-                      {u.id === currentUserId && (
-                        <span className="text-[8px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-black border border-blue-500/20 uppercase tracking-widest">Tôi</span>
-                      )}
-                    </div>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-1.5">{u.email}</p>
+                    <p className="font-black text-slate-900 text-sm leading-none">{u.name}</p>
+                    <p className="text-[9px] text-slate-400 font-bold uppercase mt-1.5">{u.email}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <select 
-                    value={u.role}
-                    onChange={(e) => handleChangeRole(u.id, e.target.value)}
-                    className={clsx(
-                      "text-[9px] font-black uppercase px-3 py-2 rounded-xl border appearance-none cursor-pointer transition-all focus:ring-0 outline-none",
-                      ROLE_COLORS[u.role] || ROLE_COLORS.VIEWER
-                    )}
-                  >
-                    {Object.entries(ROLE_LABELS).map(([val, label]) => (
-                      <option key={val} value={val} className="bg-slate-900">{label}</option>
-                    ))}
-                  </select>
-                </div>
+                <select 
+                  value={u.role}
+                  onChange={(e) => handleChangeRole(u.id, e.target.value)}
+                  className={clsx(
+                    "text-[9px] font-black uppercase px-2.5 py-1.5 rounded-lg border focus:outline-none transition-colors",
+                    ROLE_COLORS[u.role] || ROLE_COLORS.VIEWER
+                  )}
+                >
+                  {Object.entries(ROLE_LABELS).map(([val, label]) => (
+                    <option key={val} value={val}>{label}</option>
+                  ))}
+                </select>
               </div>
 
-              {/* Permissions Grid */}
-              <div className="p-6 grid grid-cols-2 gap-3 bg-white/[0.01]">
+              <div className="p-4 grid grid-cols-2 gap-2 bg-slate-50/50">
                  {[
-                   { key: 'canInbound', label: 'Nhập kho', color: 'text-emerald-400' },
-                   { key: 'canOutbound', label: 'Xuất kho', color: 'text-rose-400' },
-                   { key: 'canManageProducts', label: 'Sửa hàng', color: 'text-blue-400' },
-                   { key: 'canDeleteProducts', label: 'Xóa hàng', color: 'text-amber-400' },
-                   { key: 'canManageUsers', label: 'Duyệt User', color: 'text-violet-400' },
+                   { key: 'canInbound', label: 'Nhập kho' },
+                   { key: 'canOutbound', label: 'Xuất kho' },
+                   { key: 'canManageProducts', label: 'Sửa hàng' },
+                   { key: 'canDeleteProducts', label: 'Xóa hàng' },
+                   { key: 'canManageUsers', label: 'Quản trị' },
                  ].map((p) => {
                    const isChecked = (u as any)[p.key]
                    return (
                      <label 
                        key={p.key} 
                        className={clsx(
-                         "flex items-center gap-3 p-3 pt-4 pb-4 rounded-2xl text-[9px] font-black uppercase tracking-widest cursor-pointer transition-all border group/label",
-                         isChecked ? "glass-card border-white/10 bg-white/5" : "bg-transparent border-white/5 opacity-30 grayscale"
+                         "flex items-center gap-2.5 p-3 rounded-xl text-[9px] font-black uppercase tracking-tighter cursor-pointer transition-all border",
+                         isChecked ? "bg-white border-blue-100 text-blue-600 shadow-sm" : "bg-transparent border-transparent opacity-40 text-slate-400"
                        )}
                      >
-                       <div className={clsx(
-                         "w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all",
-                         isChecked ? "bg-white text-slate-900 border-white" : "bg-transparent border-slate-700 text-transparent"
-                       )}>
-                         <BadgeCheck size={12} strokeWidth={3} />
-                       </div>
                        <input 
                          type="checkbox"
-                         className="hidden"
+                         className="w-3.5 h-3.5 accent-blue-600 rounded"
                          checked={isChecked}
                          onChange={(e) => handleTogglePerm(u.id, p.key, e.target.checked)}
                          disabled={(u.role === 'ADMIN' && p.key === 'canManageUsers') || u.id === currentUserId}
                        />
-                       <span className={clsx(isChecked ? "text-white" : "text-slate-500")}>{p.label}</span>
+                       <span>{p.label}</span>
                      </label>
                    )
                  })}
                  
-                 {/* Delete User for Admin */}
                  {u.id !== currentUserId && (
                     <button 
                       onClick={() => handleDelete(u.id, u.name)}
-                      className="flex items-center gap-3 p-3 pt-4 pb-4 rounded-2xl text-[9px] font-black uppercase tracking-widest border border-rose-500/10 bg-rose-500/5 text-rose-500/60 hover:text-rose-400 hover:bg-rose-500/10 transition-all active:scale-95"
+                      className="flex items-center justify-center gap-2 p-3 rounded-xl text-[9px] font-black uppercase text-rose-300 border border-transparent hover:text-rose-500 hover:bg-rose-50 transition-all"
                     >
-                      <Trash2 size={16} /> Gỡ Bỏ
+                      <Trash2 size={14} /> Gỡ Bỏ
                     </button>
                  )}
               </div>
@@ -311,12 +270,8 @@ export default function UsersPageClient({ users, currentUserId }: { users: UserD
         </div>
       </section>
 
-      {/* ── FOOTER CAPTION ── */}
-      <footer className="mt-16 text-center">
-        <p className="text-[10px] font-black text-slate-700 uppercase tracking-[0.3em] leading-relaxed">
-          Phân quyền hệ thống Kho PRO <br />
-          v2.5 Professional Cloud
-        </p>
+      <footer className="mt-12 text-center pb-6">
+        <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.4em]">Kho Pro Solution v2.5</p>
       </footer>
     </div>
   )
