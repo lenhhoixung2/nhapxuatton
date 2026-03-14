@@ -87,4 +87,3 @@ export default async function ProductsPage() {
     </div>
   )
 }
-import { Pencil } from 'lucide-react'
