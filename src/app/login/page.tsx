@@ -93,7 +93,6 @@ export default function LoginPage() {
             </p>
             {/* Hidden default credentials per user request */}
           </div>
-          </div>
         </form>
       </div>
     </div>
