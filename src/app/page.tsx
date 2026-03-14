@@ -36,7 +36,8 @@ export default async function Home() {
         <div className="relative flex justify-between items-start">
           {/* Left: greeting + clock */}
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            {/* Hidden role info per user request */}
+            <div className="flex items-center gap-2 mb-1 opacity-0 pointer-events-none">
               <UserCircle size={16} className="text-blue-300" />
               <span className="text-blue-200 text-xs font-semibold uppercase tracking-widest">{user.role}</span>
             </div>
