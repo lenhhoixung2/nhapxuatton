@@ -91,9 +91,8 @@ export default function LoginPage() {
                 Đăng ký ngay
               </Link>
             </p>
-            <div className="text-center">
-              <span className="text-xs text-slate-400 italic">Mặc định: admin@wms.com / admin123</span>
-            </div>
+            {/* Hidden default credentials per user request */}
+          </div>
           </div>
         </form>
       </div>
