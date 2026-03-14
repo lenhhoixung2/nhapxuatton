@@ -8,7 +8,7 @@ import { clsx } from 'clsx'
 const navItems = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Nhập', href: '/inbound', icon: ArrowDownLeft },
-  { name: 'Hàng', href: '/products', icon: Package },
+  { name: 'Sản Phẩm', href: '/products', icon: Package },
   { name: 'Xuất', href: '/outbound', icon: ArrowUpRight },
   { name: 'Quản trị', href: '/admin', icon: ShieldCheck },
 ]
@@ -17,8 +17,8 @@ export function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[100] flex justify-center pb-8 px-5 pointer-events-none">
-      <nav className="flex items-center justify-between w-full max-w-[420px] bg-white border border-slate-200 p-1.5 rounded-[2.5rem] shadow-2xl shadow-slate-200/60 pointer-events-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white border-t-2 border-slate-200 flex justify-center shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+      <div className="flex items-center justify-between w-full max-w-lg h-16">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
@@ -28,37 +28,31 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={clsx(
-                "relative flex flex-col items-center justify-center flex-1 h-14 transition-all duration-300 rounded-[2rem] active:scale-95 group",
-                isActive ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
+                "relative flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 active:bg-slate-50",
+                isActive ? "text-blue-700 bg-blue-50/30" : "text-slate-500 hover:text-slate-900"
               )}
             >
+              {/* Active top border indicator */}
               {isActive && (
-                <div className="absolute inset-0 bg-blue-50 rounded-[1.8rem] z-0 animate-in fade-in zoom-in-95 duration-300 border border-blue-100/50" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-blue-700" />
               )}
               
-              <div className={clsx("relative z-10 transition-transform duration-300", isActive && "-translate-y-0.5")}>
-                 <Icon 
-                   size={isActive ? 22 : 20} 
-                   strokeWidth={isActive ? 3 : 2.5}
-                   className="transition-all" 
-                 />
-              </div>
+              <Icon 
+                size={isActive ? 22 : 20} 
+                strokeWidth={isActive ? 3 : 2}
+                className="transition-transform" 
+              />
 
               <span className={clsx(
-                "relative z-10 text-[8px] font-black uppercase tracking-widest mt-1 transition-all duration-300",
-                isActive ? "opacity-100 scale-100" : "opacity-0 scale-90 translate-y-1"
+                "text-[9px] font-black uppercase tracking-tighter mt-1",
+                isActive ? "opacity-100" : "opacity-60"
               )}>
                 {item.name}
               </span>
-              
-              {/* Solid indicator dot */}
-              {isActive && (
-                <div className="absolute -bottom-1 w-1 h-1 bg-blue-600 rounded-full shadow-[0_0_8px_rgba(37,99,235,0.4)]" />
-              )}
             </Link>
           )
         })}
-      </nav>
-    </div>
+      </div>
+    </nav>
   )
 }
